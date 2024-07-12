@@ -68,12 +68,14 @@ class Game {
     });
   }
 
-  getAllLocation() {
+  getAllLocation(excludeUserId) {
     const maxLatency = this.getMaxLatency();
   
-    const locationData = this.users.map((user) => {
+    const locationData = this.users
+      .filter((user) => user.id!== excludeUserId)
+      .map((user) => {
       const { x, y } = user.calculatePosition(maxLatency);
-      return { id: user.id, x, y };
+      return { id: user.id, playerId: user.playerId, x, y };
     });
     return createLocationPacket(locationData);
   }

@@ -8,7 +8,7 @@ export const packetParser = (data) => {
   const protoMessages = getProtoMessages();
 
   // 공통 패킷 구조를 디코딩
-  // 공통 패킷 내용: [handlerId, userId, clientVersion, sequence]
+  // 공통 패킷 내용: [handlerId, userId, clientVersion, payload]
   const Packet = protoMessages.common.Packet;
 
   let packet;
@@ -21,8 +21,7 @@ export const packetParser = (data) => {
 
   const handlerId = packet.handlerId;
   const userId = packet.userId;
-  const clientVersion = packet.clientVersion;
-  const sequence = packet.sequence;
+  const clientVersion = packet.version;
 
   // clientVersion 검증
   if (clientVersion !== config.client.version) {
@@ -45,18 +44,17 @@ export const packetParser = (data) => {
   try {
     payload = PayloadType.decode(packet.payload);
   } catch(error) {
-    throw new CustomError(ErrorCodes.PACKET_STRUCTURE_MISMATCH, '패킷 구조 불일치.');
+    throw new CustomError(ErrorCodes.PACKET_DECODE_ERROR, '패킷 구조 불일치.');
   }
 
-  // // 필드 검증 - 위 decode 과정에서 거치는(포함된) 과정임
-  // // 중복이므로 주석처리
-  // const errorMessage = PayloadType.verify(payload);
-  // if (errorMessage) {
-  //   throw new CustomError(
-  //     ErrorCodes.PACKET_STRUCTURE_MISMATCH,
-  //     `패킷 구조 불일치: ${errorMessage}`,
-  //   );
-  // }
+  // 필드 검증 - 위 decode 과정에서 거치는(포함된) 과정임
+  const errorMessage = PayloadType.verify(payload);
+  if (errorMessage) {
+    throw new CustomError(
+      ErrorCodes.INVALID_PACKET,
+      `패킷 구조 불일치: ${errorMessage}`,
+    );
+  }
 
   // 필드가 비어 있거나, 필수 필드가 누락된 경우 처리
   const expectedFields = Object.keys(PayloadType.fields);
@@ -74,5 +72,5 @@ export const packetParser = (data) => {
   //console.log(`clientVersion: ${clientVersion}`);
   //console.log('sequence:', sequence, 'payload:', payload);
 
-  return { handlerId, userId, payload, sequence };
+  return { handlerId, userId, payload };
 };

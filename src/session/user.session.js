@@ -2,9 +2,9 @@ import { userSessions } from './sessions.js';
 import User from '../classes/models/user.class.js';
 
 // 세션 유저 정보 생성
-export const addUser = (socket, uuid) => {
+export const addUser = (socket, uuid, playerId, latency) => {
   // user 초기화
-  const user = new User(uuid, socket);
+  const user = new User(uuid, socket, playerId, latency);
   userSessions.push(user);
   return user;
 };

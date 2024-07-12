@@ -36,7 +36,7 @@ const protoFiles = getAllProtoFiles(protoDir);
 // 로드된 프로토 메시지들을 저장할 객체
 const protoMessages = {};
 
-// 모든 .proto 파일을 로드하여 프로토 메시지를 초기화합니다.
+// 모든 .proto 파일을 로드하여 프로토 메시지를 초기화
 export const loadProtos = async () => {
   try {
     const root = new protobuf.Root();
@@ -51,7 +51,6 @@ export const loadProtos = async () => {
         protoMessages[packageName][type] = root.lookupType(typeName);
       }
     }
-    // console.log(protoMessages);
 
     console.log('Protobuf 파일이 로드되었습니다.');
   } catch (error) {
@@ -61,6 +60,5 @@ export const loadProtos = async () => {
 
 // 로드된 프로토 메시지들의 얕은 복사본을 반환합니다.
 export const getProtoMessages = () => {
-  // console.log('protoMessages:', protoMessages); // 디버깅을 위해 추가
   return { ...protoMessages };    // 얕은-복사를 통해 원본이 아닌 사본을 반환
 };

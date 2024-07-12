@@ -4,7 +4,6 @@ import { config } from './config/config.js';
 import { onConnection } from './events/onConnection.js';
 
 const server = net.createServer(onConnection);
-console.log('onConnection 되는가?');
 
 initServer().then(() => {
   server.listen(config.server.port, config.server.host, () => {

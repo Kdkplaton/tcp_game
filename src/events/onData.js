@@ -2,11 +2,7 @@ import { config } from '../config/config.js';
 import { PACKET_TYPE } from '../constants/header.js';
 import { packetParser } from '../utils/parser/packetParser.js';
 import { getHandlerById } from '../handlers/index.js';
-import { getUserById, getUserBySocket  } from '../session/user.session.js';
 import { handleError } from '../utils/error/errorHandler.js';
-import CustomError from '../utils/error/customError.js';
-import { ErrorCodes } from '../utils/error/errorCodes.js';
-import { getProtoMessages } from '../init/loadProtos.js';
 
 export const onData = (socket) => async (data) => {
   // 기존 버퍼에 새로 수신된 데이터를 추가
@@ -31,26 +27,8 @@ export const onData = (socket) => async (data) => {
 
       try {
         switch (packetType) {
-          case PACKET_TYPE.PING:
-            {
-              const protoMessages = getProtoMessages();
-              const Ping = protoMessages.common.Ping;
-              const pingMessage = Ping.decode(packet);
-              const user = getUserBySocket(socket);
-              if (!user) {
-                throw new CustomError(ErrorCodes.USER_NOT_FOUND, '유저를 찾을 수 없습니다.');
-              }
-              user.handlePong(pingMessage);
-            }
-            break;
           case PACKET_TYPE.NORMAL:
-            const { handlerId, sequence, payload, userId } = packetParser(packet);
-      
-            const user = getUserById(userId);
-            // 유저가 접속해 있는 상황에서 시퀀스 검증
-            if (user && user.sequence !== sequence) {
-              throw new CustomError(ErrorCodes.INVALID_SEQUENCE, '잘못된 호출 값. ');
-            }
+            const { handlerId, payload, userId } = packetParser(packet);
             
             const handler = getHandlerById(handlerId);
             await handler({ socket, userId, payload });

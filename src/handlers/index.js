@@ -11,14 +11,6 @@ const handlers = {
     handler: initialHandler,
     protoType: 'initial.InitialPacket',
   },
-  [HANDLER_IDS.CREATE_GAME]: {
-    handler: createGameHandler,
-    protoType: 'game.CreateGamePayload',
-  },
-  [HANDLER_IDS.JOIN_GAME]: {
-    handler: joinGameHandler,
-    protoType: 'game.JoinGamePayload',
-  },
   [HANDLER_IDS.UPDATE_LOCATION]: {
     handler: updateLocationHandler,
     protoType: 'game.LocationUpdatePayload',
