@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package initial;
 
-message initialPacket {
+message InitialPacket {
   string deviceId = 1;      // 장치 ID
   uint32 playerId = 2;      // 플레이어 ID
   float latency = 3;        // 지연 시간

@@ -8,7 +8,7 @@ import { packetNames } from '../protobuf/packetNames.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 프로토파일이 있는 디렉토리 경로 : 경로 설정
+// 프로토-파일들이 있는 디렉토리 경로
 const protoDir = path.join(__dirname, '../protobuf');
 
 // 주어진 디렉토리 내 모든 proto 파일을 재귀적으로 찾는 함수
